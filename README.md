@@ -2,7 +2,7 @@
 
 In this project, we developed a genetic algorithm capable of determining the optimal attribute conditions for a game character. In this game, two characters face each other in each battle, and they have the following attributes:
 
-  Attack (Atk) - Increases the normal damage dealt by a character;
+  - Attack (Atk) - Increases the normal damage dealt by a character;
   
   Defense (Def) - Decreases the normal damage received by a character;
   
