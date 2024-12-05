@@ -21,3 +21,10 @@ In this project, we developed a genetic algorithm capable of determining the opt
   - Luck - Increases the chance of the character dealing a critical hit;
   
   - Agility (Agi) - Increases the chance of the character to dodge an attack.
+
+## Evaluation
+
+Group
+- Arthur Trottmann Ramos - 14681052
+- Henrique Drago - 14675441
+- João Pedro Boiago Gomes Santana - 14747211
