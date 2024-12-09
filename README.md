@@ -8,9 +8,9 @@ In this project, we developed a genetic algorithm capable of determining the opt
   
   - Health Points (HP) - Increases the amount of damage a character can take before death;
   
-  - Regeneration (Regen) - Increases the amoult of health points regained by the character;
+  - Regeneration (Regen) - Increases the amoult of health points regained by the character every turn;
   
-  - Speed (Spd) - Determines who goes first in a battle;
+  - Speed (Spd) - Increases the amount of attacks dealt by the character;
   
   - Inteligence (Intel) - Increases the chance of the character doing a special attack;
   
@@ -18,9 +18,9 @@ In this project, we developed a genetic algorithm capable of determining the opt
   
   - Special Defense (SpDef) - Decreases the special damage received by a character;
   
-  - Luck - Increases the chance of the character dealing a critical hit;
+  - Luck - Increases the chance of the character dealing a critical hit that increases the damage dealt by an attack;
   
-  - Agility (Agi) - Increases the chance of the character to dodge an attack.
+  - Agility (Agi) - Increases the chance of the character to dodge an attack, which nulifies the damage taken.
 
 ## Evaluation
 
