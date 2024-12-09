@@ -77,7 +77,7 @@ using namespace std;
 #define MIN_VARIATION_EXPECTED 0.01 // Variação esperada a cada geração
 
 #define POP_SIZE 200 // Tamanho da População
-#define GENERATION_NUMBER 300 // N° de gerações
+#define GENERATION_NUMBER 700 // N° de gerações
 #define N_DUELS 3 // N° de duelos em cada confronto
 #define N_ANCESTORS 8 // N° de ancestrais salvos
 #define GENOCIDE_AMOUNT 70 // Porcentagem da população substituida em um genocidio
@@ -533,20 +533,20 @@ int main(void) {
     srand(time(NULL));
 
     // Dados para o grafico
-    ofstream bestFitnessData("fitness.dat", ofstream::out);
-    ofstream popMeanData("mean.dat", ofstream::out);
-    ofstream mutData("mut.dat", ofstream::out);
+    ofstream bestFitnessData("data/fitness.dat", ofstream::out);
+    ofstream popMeanData("data/mean.dat", ofstream::out);
+    ofstream mutData("data/mut.dat", ofstream::out);
 
-    ofstream atk("atk.dat", ofstream::out);
-    ofstream def("def.dat", ofstream::out);
-    ofstream hp("hp.dat", ofstream::out);
-    ofstream regen("regen.dat", ofstream::out);
-    ofstream spd("spd.dat", ofstream::out);
-    ofstream intel("intel.dat", ofstream::out);
-    ofstream spatk("spatk.dat", ofstream::out);
-    ofstream spdef("spdef.dat", ofstream::out);
-    ofstream luck("luck.dat", ofstream::out);
-    ofstream agi("agi.dat", ofstream::out);
+    ofstream atk("data/atk.dat", ofstream::out);
+    ofstream def("data/def.dat", ofstream::out);
+    ofstream hp("data/hp.dat", ofstream::out);
+    ofstream regen("data/regen.dat", ofstream::out);
+    ofstream spd("data/spd.dat", ofstream::out);
+    ofstream intel("data/intel.dat", ofstream::out);
+    ofstream spatk("data/spatk.dat", ofstream::out);
+    ofstream spdef("data/spdef.dat", ofstream::out);
+    ofstream luck("data/luck.dat", ofstream::out);
+    ofstream agi("data/agi.dat", ofstream::out);
 
     vector<Character> players;
     vector<Character> evaluated;
