@@ -24,7 +24,7 @@ using namespace std;
 // Valores base de cada atributo
 #define ATK_BASE 0
 #define DEF_BASE 0
-#define HP_BASE 2800
+#define HP_BASE 3000
 #define REGEN_BASE 0
 #define SPD_BASE 0
 #define INTEL_BASE 0
@@ -34,13 +34,13 @@ using namespace std;
 #define AGI_BASE 0
 
 // Multiplicador para a distribuição dos pontos de cada atributo
-#define ATK_MULTIPLIER 2
+#define ATK_MULTIPLIER 1
 #define DEF_MULTIPLIER 3
-#define HP_MULTIPLIER 5
+#define HP_MULTIPLIER 10
 #define REGEN_MULTIPLIER 1
 #define SPD_MULTIPLIER 1
 #define INTEL_MULTIPLIER 1
-#define SPATK_MULTIPLIER 2
+#define SPATK_MULTIPLIER 1
 #define SPDEF_MULTIPLIER 3
 #define LUCK_MULTIPLIER 1
 #define AGI_MULTIPLIER 1
@@ -77,7 +77,7 @@ using namespace std;
 #define MIN_VARIATION_EXPECTED 0.01 // Variação esperada a cada geração
 
 #define POP_SIZE 200 // Tamanho da População
-#define GENERATION_NUMBER 700 // N° de gerações
+#define GENERATION_NUMBER 500 // N° de gerações
 #define N_DUELS 3 // N° de duelos em cada confronto
 #define N_ANCESTORS 8 // N° de ancestrais salvos
 #define GENOCIDE_AMOUNT 70 // Porcentagem da população substituida em um genocidio
@@ -219,15 +219,12 @@ class Character {
             if(this->hpCurr > this->hpMax) {
                 this->hpCurr = this->hpMax;
             }
-            //cout << "CURR: " << this->hpCurr << "MAX: " << this->hpMax << endl;
         }
 
         void Mutation() {
 
             int mutAmountP, mutAmountN;
             mutAmountP = mutAmountN = MUT_RATE * TOTAL_STATS;
-
-            //cout << "MTRATE" << mutAmountP << endl;
 
             vector<int> indexes;
 
@@ -431,7 +428,7 @@ vector<Character> EvaluateTournament(vector<Character> &players) {
     return newPlayers;
 }
 
-vector<Character> EvaluateRandom(vector<Character> &players) {
+/*vector<Character> EvaluateRandom(vector<Character> &players) {
     vector<double> fits;
     vector<Character> newPlayers(POP_SIZE);
     vector<pair<double, int>> infos(POP_SIZE); // Pontuação e index;
@@ -476,7 +473,7 @@ vector<Character> EvaluateRandom(vector<Character> &players) {
     }
 
     return newPlayers;
-}
+}*/
 
 vector<Character> Genocide(vector<Character> players) {
     vector<Character> migrated;
@@ -495,7 +492,6 @@ vector<Character> Genocide(vector<Character> players) {
         players[i].SetIndex(i);
     }
 
-    //cout << "GENOCIDE!" << endl;
     return players;
 }
 
@@ -506,7 +502,6 @@ double popMean(vector<Character> p) {
     }
 
     return mean/POP_SIZE;
-
 }
 
 bool Hereditariedade(vector<Character> &antepassados) {
@@ -516,7 +511,6 @@ bool Hereditariedade(vector<Character> &antepassados) {
     }
     scoreMean = scoreMean/N_ANCESTORS;
 
-    //cout << scoreMean << " : " << antepassados[N_ANCESTORS-1].score << " : " << antepassados[N_ANCESTORS-1].score - scoreMean << " : " << scoreMean*MIN_VARIATION_EXPECTED << endl;
     if(abs(antepassados[N_ANCESTORS-1].score - scoreMean) < scoreMean*MIN_VARIATION_EXPECTED) {
         MUT_RATE *= 2;
 
