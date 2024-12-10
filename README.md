@@ -22,7 +22,12 @@ In this project, we developed a genetic algorithm capable of determining the opt
   
   - Agility (Agi) - Increases the chance of the character to dodge an attack, which nulifies the damage taken.
 
+## Initialization
+
+The initial population is generated with a total of X individuals, where X is a parameter that can be configured for each test. Each individual is a character whose stats are randomly generated based on the total points available.
+
 ## Evaluation
+
 
 Group
 - Arthur Trottmann Ramos - 14681052
