@@ -34,20 +34,20 @@ using namespace std;
 #define AGI_BASE 0
 
 // Multiplicador para a distribuição dos pontos de cada atributo
-#define ATK_MULTIPLIER 1
+#define ATK_MULTIPLIER 2
 #define DEF_MULTIPLIER 3
-#define HP_MULTIPLIER 10
+#define HP_MULTIPLIER 5
 #define REGEN_MULTIPLIER 1
 #define SPD_MULTIPLIER 1
 #define INTEL_MULTIPLIER 1
-#define SPATK_MULTIPLIER 1
+#define SPATK_MULTIPLIER 2
 #define SPDEF_MULTIPLIER 3
 #define LUCK_MULTIPLIER 1
 #define AGI_MULTIPLIER 1
 
 // Outros Multiplicadores de Dano, 1 ponto = +10% de Dano
-#define CRIT_DMG 12
-#define SPECIAL_MULTIPLIER 10 
+#define CRIT_DMG 15
+#define SPECIAL_MULTIPLIER 12 
 
 // Algums Multiplicadores para a efetividade de alguns status
 // Quanto maior o valor, menos efetivo
@@ -65,7 +65,7 @@ using namespace std;
 // Alguns limites para a aplicação de certos stats
 // Influencia apenas no uso do stat em combate, não em sua distribuição
 #define AGI_HARD_CAP 99.0 // Limite para a chance de esquiva
-#define AGI_SOFT_CAP 60.0 // Ponto em que a chance de esquiva se torna menos efetiva
+#define AGI_SOFT_CAP 45.0 // Ponto em que a chance de esquiva se torna menos efetiva
 #define INTEL_CAP 100 // Limite para a chance de realizar um especial
 #define CRIT_CAP 100 // Limite para a chance de critico
 
@@ -77,7 +77,7 @@ using namespace std;
 #define MIN_VARIATION_EXPECTED 0.01 // Variação esperada a cada geração
 
 #define POP_SIZE 200 // Tamanho da População
-#define GENERATION_NUMBER 500 // N° de gerações
+#define GENERATION_NUMBER 300 // N° de gerações
 #define N_DUELS 3 // N° de duelos em cada confronto
 #define N_ANCESTORS 8 // N° de ancestrais salvos
 #define GENOCIDE_AMOUNT 70 // Porcentagem da população substituida em um genocidio
