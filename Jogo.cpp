@@ -24,7 +24,7 @@ using namespace std;
 // Valores base de cada atributo
 #define ATK_BASE 0
 #define DEF_BASE 0
-#define HP_BASE 2000
+#define HP_BASE 1000
 #define REGEN_BASE 0
 #define SPD_BASE 0
 #define INTEL_BASE 0
@@ -36,7 +36,7 @@ using namespace std;
 // Multiplicador para a distribuição dos pontos de cada atributo
 #define ATK_MULTIPLIER 1
 #define DEF_MULTIPLIER 3
-#define HP_MULTIPLIER 30
+#define HP_MULTIPLIER 10
 #define REGEN_MULTIPLIER 1
 #define SPD_MULTIPLIER 1
 #define INTEL_MULTIPLIER 1
@@ -60,16 +60,16 @@ using namespace std;
 // Multiplicador para a queda de efetividade da regeneração com o passar da batalha
 // Quanto maior o valor, mais devagar ela decresce
 #define REGEN_DECAY 1
-#define SPEED_DECAY 2
+#define SPEED_DECAY 1
 
 // Alguns limites para a aplicação de certos stats
 // Influencia apenas no uso do stat em combate, não em sua distribuição
 #define AGI_HARD_CAP 99.0 // Limite para a chance de esquiva
-#define AGI_SOFT_CAP 70.0 // Ponto em que a chance de esquiva se torna menos efetiva
+#define AGI_SOFT_CAP 40.0 // Ponto em que a chance de esquiva se torna menos efetiva
 #define INTEL_CAP 100 // Limite para a chance de realizar um especial
 #define CRIT_CAP 100 // Limite para a chance de critico
 
-#define TOTAL_STATS 500 // Total de pontos de stats para uso
+#define TOTAL_STATS 400 // Total de pontos de stats para uso
 #define ATTRIBUTE_NUMBER 10 // Número de atributos do personagem
 
 #define BASE_MUT_RATE 0.01 // Taxa base de mutação
@@ -77,12 +77,11 @@ using namespace std;
 #define MIN_VARIATION_EXPECTED 0.01 // Variação esperada a cada geração
 
 #define POP_SIZE 200 // Tamanho da População
-#define GENERATION_NUMBER 500 // N° de gerações
+#define GENERATION_NUMBER 400 // N° de gerações
 #define N_DUELS 3 // N° de duelos em cada confronto
 #define N_ANCESTORS 8 // N° de ancestrais salvos
 #define GENOCIDE_AMOUNT 70 // Porcentagem da população substituida em um genocidio
-
-#define ENEMY_NUMBER 10
+#define BASE_FITNESS 100
 
 double MUT_RATE = BASE_MUT_RATE; // Inicialização da Taxa de Matação
 
@@ -403,9 +402,9 @@ vector<Character> EvaluateTournament(vector<Character> &players) {
             int turns = max(1, aux/N_DUELS);
 
             if(players[i].victories > v + N_DUELS/2) {
-                fits[i] += (100/turns);
+                fits[i] += (BASE_FITNESS/turns);
             } else {
-                fits[j] += (100/turns);
+                fits[j] += (BASE_FITNESS/turns);
             }
             
         }
@@ -569,7 +568,7 @@ int main(void) {
 
         bestFitnessData << i << " " << best.score << endl;
 
-        mutData << i << " " << MUT_RATE*100 << endl;
+        mutData << i << " " << MUT_RATE*BASE_FITNESS << endl;
         
         atk << i << " " << best.statPoints[0] << endl;
         def << i << " " << best.statPoints[1] << endl;
