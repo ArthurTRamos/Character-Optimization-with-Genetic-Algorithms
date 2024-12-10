@@ -24,7 +24,7 @@ using namespace std;
 // Valores base de cada atributo
 #define ATK_BASE 0
 #define DEF_BASE 0
-#define HP_BASE 3000
+#define HP_BASE 2000
 #define REGEN_BASE 0
 #define SPD_BASE 0
 #define INTEL_BASE 0
@@ -34,20 +34,20 @@ using namespace std;
 #define AGI_BASE 0
 
 // Multiplicador para a distribuição dos pontos de cada atributo
-#define ATK_MULTIPLIER 2
+#define ATK_MULTIPLIER 1
 #define DEF_MULTIPLIER 3
-#define HP_MULTIPLIER 5
+#define HP_MULTIPLIER 30
 #define REGEN_MULTIPLIER 1
 #define SPD_MULTIPLIER 1
 #define INTEL_MULTIPLIER 1
-#define SPATK_MULTIPLIER 2
+#define SPATK_MULTIPLIER 1
 #define SPDEF_MULTIPLIER 3
 #define LUCK_MULTIPLIER 1
 #define AGI_MULTIPLIER 1
 
 // Outros Multiplicadores de Dano, 1 ponto = +10% de Dano
-#define CRIT_DMG 15
-#define SPECIAL_MULTIPLIER 12 
+#define CRIT_DMG 12
+#define SPECIAL_MULTIPLIER 10
 
 // Algums Multiplicadores para a efetividade de alguns status
 // Quanto maior o valor, menos efetivo
@@ -60,12 +60,12 @@ using namespace std;
 // Multiplicador para a queda de efetividade da regeneração com o passar da batalha
 // Quanto maior o valor, mais devagar ela decresce
 #define REGEN_DECAY 1
-#define SPEED_DECAY 1
+#define SPEED_DECAY 2
 
 // Alguns limites para a aplicação de certos stats
 // Influencia apenas no uso do stat em combate, não em sua distribuição
 #define AGI_HARD_CAP 99.0 // Limite para a chance de esquiva
-#define AGI_SOFT_CAP 45.0 // Ponto em que a chance de esquiva se torna menos efetiva
+#define AGI_SOFT_CAP 70.0 // Ponto em que a chance de esquiva se torna menos efetiva
 #define INTEL_CAP 100 // Limite para a chance de realizar um especial
 #define CRIT_CAP 100 // Limite para a chance de critico
 
@@ -77,7 +77,7 @@ using namespace std;
 #define MIN_VARIATION_EXPECTED 0.01 // Variação esperada a cada geração
 
 #define POP_SIZE 200 // Tamanho da População
-#define GENERATION_NUMBER 300 // N° de gerações
+#define GENERATION_NUMBER 500 // N° de gerações
 #define N_DUELS 3 // N° de duelos em cada confronto
 #define N_ANCESTORS 8 // N° de ancestrais salvos
 #define GENOCIDE_AMOUNT 70 // Porcentagem da população substituida em um genocidio
@@ -212,7 +212,7 @@ class Character {
         }
 
         void RegenerateHP(int turnCount) {
-            double effectiveRegen = (this->regen/REGEN_EFFECTIVENESS)/(1 + (turnCount*turnCount/REGEN_DECAY));
+            double effectiveRegen = (this->regen/REGEN_EFFECTIVENESS)/(1 + ((turnCount*turnCount)/REGEN_DECAY));
 
             this->hpCurr += effectiveRegen * this->hpMax;
 
@@ -403,9 +403,9 @@ vector<Character> EvaluateTournament(vector<Character> &players) {
             int turns = max(1, aux/N_DUELS);
 
             if(players[i].victories > v + N_DUELS/2) {
-                fits[i] += (players[i].victories)/N_DUELS + POP_SIZE/(turns);
+                fits[i] += (100/turns);
             } else {
-                fits[j] += (players[j].victories)/N_DUELS + POP_SIZE/(turns);
+                fits[j] += (100/turns);
             }
             
         }
@@ -586,11 +586,6 @@ int main(void) {
         double playerMean = popMean(evaluated);
         popMeanData << i << " " << playerMean << endl;
 
-        vector<Character> newGeneration(POP_SIZE);
-
-        evaluated[0].victories = 0;
-        evaluated[0].score = 0;
-
         for(int i = 1; i < POP_SIZE; i++) {
             evaluated[i].Elitism(antepassados[0]);
         }
@@ -598,6 +593,9 @@ int main(void) {
         if(Hereditariedade(antepassados)) {
             Genocide(evaluated);
         }
+
+        evaluated[0].victories = 0;
+        evaluated[0].score = 0;
 
         players = evaluated;
 
