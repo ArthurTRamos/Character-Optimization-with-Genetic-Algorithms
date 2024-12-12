@@ -77,14 +77,15 @@ using namespace std;
 #define MIN_VARIATION_EXPECTED 0.01 // Variação esperada a cada geração
 
 #define POP_SIZE 200 // Tamanho da População
-#define GENERATION_NUMBER 400 // N° de gerações
-#define N_DUELS 3 // N° de duelos em cada confronto
+#define GENERATION_NUMBER 100 // N° de gerações
+#define N_DUELS 1 // N° de duelos em cada confronto
 #define N_ANCESTORS 8 // N° de ancestrais salvos
 #define GENOCIDE_AMOUNT 70 // Porcentagem da população substituida em um genocidio
 #define BASE_FITNESS 100
 
 double MUT_RATE = BASE_MUT_RATE; // Inicialização da Taxa de Matação
 
+// Classe do personagem do jogo
 class Character {
     public:
         int atk;
@@ -105,8 +106,6 @@ class Character {
         int victories;
         double score;
         int index;
-
-        //string name;
 
         Character() {
             this->index = -1;
@@ -182,6 +181,7 @@ class Character {
             cout << "Victories: " << this->victories << endl;
         }
 
+        // Calcula quanto de dano o personagem receberá
         void TakeDamage(double damage, bool special) {
             int effectiveDef;
             if(special) {
@@ -220,11 +220,13 @@ class Character {
             }
         }
 
+        // Muta os atributos do personagem
         void Mutation() {
-
+            // Pontos a serem adicionados (mutAmountP) e retirados (mutAmountN) de stats aleatórios
             int mutAmountP, mutAmountN;
             mutAmountP = mutAmountN = MUT_RATE * TOTAL_STATS;
 
+            // Guarda a posição dos atributos
             vector<int> indexes;
 
             for(int i = 0; i < ATTRIBUTE_NUMBER; i++) {
@@ -234,10 +236,14 @@ class Character {
             random_device rd;
             mt19937 gen(rd());
 
+            // Embaralha a ordem dos atributos no vector
             shuffle(indexes.begin(), indexes.end(), gen);
 
+            // Se o elemento é true, então o respectivo atributo teve seu valor aumentado
+            // Se false, então o valor do atributo foi reduzido
             vector<bool> choosen(10, false);
 
+            // Soma valores aos atributos selecionados
             for(int i = 0; i < ATTRIBUTE_NUMBER and mutAmountP > 0; i++) {
                 int increase = rand() % mutAmountP;
                 this->statPoints[indexes[i]] += increase;
@@ -245,8 +251,10 @@ class Character {
                 choosen[i] = true;
             }
 
+            // Se restou algum ponto de soma, então ele é inserido em algum atributo
             this->statPoints[rand() % ATTRIBUTE_NUMBER] += mutAmountP;
 
+            // Subtrai valores aos atributos ainda não selecionados
             for(int i = 0; i < ATTRIBUTE_NUMBER and mutAmountN > 0; i++) {
                 if(!choosen[i]) {
                     int decrease = rand() % mutAmountN;
@@ -273,7 +281,8 @@ class Character {
             int effectiveIntel = min(INTEL_CAP, this->intel/INTEL_EFFECTIVENESS);
             return (rand()%100 < effectiveIntel);
         }
-
+        
+        // Determina se o personagem dará um ataque especial, crítico ou dano normal
         double damageDealt(bool special) {
             int effectiveLuck = min(CRIT_CAP, this->luck/LUCK_EFFECTIVENESS);
             bool cc = (rand()%100 < effectiveLuck);
@@ -285,6 +294,7 @@ class Character {
                 baseDmg = this->atk;
             }
 
+            // Dano crítico
             if(cc) {
                 baseDmg = baseDmg + ((baseDmg * CRIT_DMG)/10); 
             }
@@ -296,6 +306,7 @@ class Character {
             this->index = i;
         }
 
+        // Realiza o elitismo entre o personagem atual e o pai
         void Elitism(Character pai) {
             int aux = TOTAL_STATS;
             for(int i = 0; i < ATTRIBUTE_NUMBER; i++) {
@@ -307,11 +318,14 @@ class Character {
                 this->statPoints[(int)rand()%ATTRIBUTE_NUMBER]++;
             }
 
+            // Muta o personagem
             this->Mutation();
             this->AttributeStats();
         }
 };
 
+// Determina quantos ataques player dará em enemy
+// E se player terá um especial ou não
 void Attack(Character *player, Character *enemy) {
     int effectiveSpd = player->spd/SPD_EFFECTIVENESS; 
 
@@ -333,6 +347,7 @@ void Attack(Character *player, Character *enemy) {
     }
 }
 
+// Realiza o duelo entre player e enemy
 int Duel(Character *player, Character *enemy) {
     bool first = rand()%2;
     bool inicial = first;
@@ -382,10 +397,12 @@ vector<Character> Initialize() {
     return players;
 }
 
+// Avalia os personagens a partir de batalhas
 vector<Character> EvaluateTournament(vector<Character> &players) {
+    int old_percent = 0;
     vector<double> fits;
     vector<Character> newPlayers(POP_SIZE);
-    vector<pair<double, int>> infos(POP_SIZE); // Pontuação e index;
+    vector<pair<double, int>> infos(POP_SIZE); // Pontuação e index
 
     fits.assign(POP_SIZE, 0);
 
@@ -401,6 +418,7 @@ vector<Character> EvaluateTournament(vector<Character> &players) {
             }
             int turns = max(1, aux/N_DUELS);
 
+            // Somente o personagem com mais vitórias é que recebe a pontuação
             if(players[i].victories > v + N_DUELS/2) {
                 fits[i] += (BASE_FITNESS/turns);
             } else {
@@ -412,55 +430,16 @@ vector<Character> EvaluateTournament(vector<Character> &players) {
         fits[i] /= POP_SIZE;
         infos[i] = make_pair(fits[i], players[i].index);
         players[i].score = fits[i];
-    }
 
-    sort(infos.begin(), infos.end(), greater<>());
-
-    for(int i = 0; i < POP_SIZE; i++) {
-        int indice = infos[i].second;
-
-        newPlayers[i] = players[indice];
-        newPlayers[i].SetIndex(i);
-
-    }
-
-    return newPlayers;
-}
-
-/*vector<Character> EvaluateRandom(vector<Character> &players) {
-    vector<double> fits;
-    vector<Character> newPlayers(POP_SIZE);
-    vector<pair<double, int>> infos(POP_SIZE); // Pontuação e index;
-
-    fits.assign(POP_SIZE, 0);
-
-    Character p;
-    int v;
-
-    for(int i = 0; i < POP_SIZE; i++) {
-
-        for(int j = 0; j < ENEMY_NUMBER; j++) {
-            v = players[i].victories;
-            
-            p.GenerateCharacterStats();
-            p.AttributeStats();
-
-            int aux = 0;
-            for(int k = 0; k < N_DUELS; k++) {
-                aux += Duel(&players[i], &p);
-            }
-            int turns = max(1, aux/N_DUELS);
-
-            if(players[i].victories > v + N_DUELS/2) {
-                fits[i] += (players[i].victories)/(N_DUELS) + ENEMY_NUMBER/turns;
-            }
+        int percent = ((i+1)*100)/POP_SIZE;
+        if(percent != old_percent) {
+            system("clear");
+            cout << percent << "%" << endl;
         }
-
-        fits[i] /= ENEMY_NUMBER;
-        infos[i] = make_pair(fits[i], players[i].index);
-        players[i].score = fits[i];
+        old_percent = percent;
     }
 
+    // Ordena os fitness do maior para o menor
     sort(infos.begin(), infos.end(), greater<>());
 
     for(int i = 0; i < POP_SIZE; i++) {
@@ -472,8 +451,9 @@ vector<Character> EvaluateTournament(vector<Character> &players) {
     }
 
     return newPlayers;
-}*/
+}      
 
+// Realiza o genocídio, mantendo apenas o melhor de todos
 vector<Character> Genocide(vector<Character> players) {
     vector<Character> migrated;
     migrated = Initialize();
@@ -503,9 +483,10 @@ double popMean(vector<Character> p) {
     return mean/POP_SIZE;
 }
 
+// Verifica se é necessário alterar a taxa de mutação
 bool Hereditariedade(vector<Character> &antepassados) {
     double scoreMean = 0;
-    for(int i = 0; i < N_ANCESTORS; i++) {
+    for(int i = 0; i < N_ANCESTORS - 1; i++) {
         scoreMean += antepassados[i].score;
     }
     scoreMean = scoreMean/N_ANCESTORS;
@@ -513,6 +494,7 @@ bool Hereditariedade(vector<Character> &antepassados) {
     if(abs(antepassados[N_ANCESTORS-1].score - scoreMean) < scoreMean*MIN_VARIATION_EXPECTED) {
         MUT_RATE *= 2;
 
+        // Realiza o genocídio
         if(MUT_RATE > MAX_MUT_RATE) {
             MUT_RATE = BASE_MUT_RATE;
             return true;
