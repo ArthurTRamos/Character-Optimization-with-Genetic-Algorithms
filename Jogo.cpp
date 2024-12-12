@@ -74,14 +74,14 @@ using namespace std;
 
 #define BASE_MUT_RATE 0.01 // Taxa base de mutação
 #define MAX_MUT_RATE 0.2 // Taxa Máxima de mutação
-#define MIN_VARIATION_EXPECTED 0.01 // Variação esperada a cada geração
+#define MIN_VARIATION_EXPECTED 0.001 // Variação esperada a cada geração
 
 #define POP_SIZE 200 // Tamanho da População
-#define GENERATION_NUMBER 400 // N° de gerações
+#define GENERATION_NUMBER 2000 // N° de gerações
 #define N_DUELS 3 // N° de duelos em cada confronto
 #define N_ANCESTORS 8 // N° de ancestrais salvos
 #define GENOCIDE_AMOUNT 70 // Porcentagem da população substituida em um genocidio
-#define BASE_FITNESS 100
+#define BASE_FITNESS 100 // Fitness maxima
 
 double MUT_RATE = BASE_MUT_RATE; // Inicialização da Taxa de Matação
 
@@ -505,10 +505,10 @@ double popMean(vector<Character> p) {
 
 bool Hereditariedade(vector<Character> &antepassados) {
     double scoreMean = 0;
-    for(int i = 0; i < N_ANCESTORS; i++) {
+    for(int i = 0; i < N_ANCESTORS-1; i++) {
         scoreMean += antepassados[i].score;
     }
-    scoreMean = scoreMean/N_ANCESTORS;
+    scoreMean = scoreMean/(N_ANCESTORS-1);
 
     if(abs(antepassados[N_ANCESTORS-1].score - scoreMean) < scoreMean*MIN_VARIATION_EXPECTED) {
         MUT_RATE *= 2;
