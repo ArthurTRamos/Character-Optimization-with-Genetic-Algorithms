@@ -40,7 +40,11 @@ After each population evaluation, we save the best gladiator at the end of a fix
 
 ## Graphical Results
 
+Below, there are some graphs showing how the genetic algorithm handles different balances and configurations.
+
 ## Video
+
+Link: 
 
 Group
 - Arthur Trottmann Ramos - 14681052
