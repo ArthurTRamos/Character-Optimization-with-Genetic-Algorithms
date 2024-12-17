@@ -40,11 +40,15 @@ After each population evaluation, we save the best gladiator at the end of a fix
 
 ## Graphical Results
 
-Below, there are some graphs showing how the genetic algorithm handles different balances and configurations.
+Below, there is two graphs showing how the genetic algorithm handles a configuration. The first one represents the evolution of the fitness and the second one represents the evolution of the stats.
+
+![Best, population anda mutation evolution](graphs/Score.png)
+
+![Stats evolution](graphs/bestStats.png)
 
 ## Video
 
-Link: 
+Link: https://www.youtube.com/watch?v=q8HwemRlRrw
 
 Group
 - Arthur Trottmann Ramos - 14681052
